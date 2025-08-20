@@ -1,12 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-# import os
-# from dotenv import load_dotenv
+import os
+from dotenv import load_dotenv
 
 from app.routes import customers, addresses, orders, drivers, auth
 from app.database.connection import engine, Base
+from app.utils.logger import logger
 
-# load_dotenv()
+logger.debug("Starting Delivery Order Service at debug level...")
+
+load_dotenv()
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -42,4 +45,4 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run("main:app", host="0.0.0.0", port=8001, reload=True)
